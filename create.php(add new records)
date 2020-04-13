@@ -1,0 +1,160 @@
+<?php
+// Include config file
+require_once "config.php";
+ 
+// Define variables and initialize with empty values
+$name = $Sub1 = $Sub2 = $Sub3 = $Sub4 = $Sub5 = "";
+$name_err = $Sub1_err = $Sub2_err = $Sub3_err = $Sub4_err = $Sub5_err = "";
+
+// Processing form data when form is submitted
+if($_SERVER["REQUEST_METHOD"] == "POST"){
+    
+    // Validate name
+    $input_name = trim($_POST["name"]);
+    if(empty($input_name)){
+        $name_err = "Please enter a name.";
+    } elseif(!filter_var($input_name, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
+        $name_err = "Please enter a valid name.";
+    } else{
+        $name = $input_name;
+    }
+
+    // Validate Subjects
+     $input_Sub1 = trim($_POST["Sub1"]);
+    if(empty($input_Sub1)){
+        $Sub1_err = "Please enter Sub1 marks.";     
+    } elseif(!is_numeric($input_Sub1)){
+        $Sub1_err = "Please enter a positive integer value.";
+    } else{
+        $Sub1 = $input_Sub1;
+    }	    
+	
+     $input_Sub2 = trim($_POST["Sub2"]);
+    if(empty($input_Sub2)){
+        $Sub2_err = "Please enter Sub2 marks.";     
+    } elseif(!is_numeric($input_Sub2)){
+        $Sub2_err = "Please enter a positive integer value.";
+    } else{
+        $Sub2 = $input_Sub2;
+    }	    
+	
+	$input_Sub3 = trim($_POST["Sub3"]);
+    if(empty($input_Sub3)){
+        $Sub3_err = "Please enter Sub3 marks.";     
+    } elseif(!is_numeric($input_Sub3)){
+        $Sub3_err = "Please enter a positive integer value.";
+    } else{
+        $Sub3 = $input_Sub3;
+    }	    
+	
+	$input_Sub4 = trim($_POST["Sub4"]);
+    if(empty($input_Sub4)){
+        $Sub4_err = "Please enter Sub4 marks.";     
+    } elseif(!is_numeric($input_Sub4)){
+        $Sub4_err = "Please enter a positive integer value.";
+    } else{
+        $Sub4 = $input_Sub4;
+    }	    
+	
+	
+    $input_Sub5 = trim($_POST["Sub5"]);
+    if(empty($input_Sub5)){
+        $Sub5_err = "Please enter Sub5 marks.";     
+    } elseif(!is_numeric($input_Sub5)){
+        $Sub5_err = "Please enter a positive integer value.";
+    } else{
+        $Sub5 = $input_Sub5;
+    }
+
+    
+    // Check input errors before inserting in database
+    if(empty($name_err) && empty($Sub1_err) && empty($Sub2_err) && empty($Sub3_err) && empty($Sub4_err) && empty($Sub5_err)){
+
+	// Set parameters
+        $param_name = $name;
+        $param_sub1 = $Sub1;
+	$param_sub2 = $Sub2;
+	$param_sub3 = $Sub3;
+	$param_sub4 = $Sub4;
+	$param_sub5 = $Sub5;
+
+    	//VALUES INSERTION
+    	$sql = "INSERT INTO scores (Name, Sub1, Sub2, Sub3, Sub4, Sub5)
+VALUES( '$param_name','$param_sub1','$param_sub2','$param_sub3','$param_sub4', '$param_sub5')";
+
+	if ($conn->query($sql) === TRUE) {
+    		// Records created successfully. Redirect to landing page
+                header("location: index.php");
+                exit();
+	} else {
+    		echo "Error: " . $sql . "<br>" . $conn->error;
+	}
+
+    }
+$conn->close();
+
+}
+?>
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Record</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css">
+    <style type="text/css">
+        .wrapper{
+            width: 350px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="page-header">
+                        <h2>Add Student scores</h2>
+                    </div>
+                    <p>Please fill this form and submit to add student record to the database.</p>
+                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
+                        <div class="form-group <?php echo (!empty($name_err)) ? 'has-error' : ''; ?>">
+                            <label>Name</label>
+                            <input type="text" name="name" class="form-control" value="<?php echo $name; ?>">
+                            <span class="help-block"><?php echo $name_err;?></span>
+                        </div>
+                        <div class="form-group <?php echo (!empty($Sub1_err)) ? 'has-error' : ''; ?>">
+                            <label>Sub1</label>
+                            <input type="text" name="Sub1" class="form-control" value="<?php echo $Sub1; ?>">
+                            <span class="help-block"><?php echo $Sub1_err;?></span>
+                        </div>			
+			<div class="form-group <?php echo (!empty($Sub2_err)) ? 'has-error' : ''; ?>">
+                            <label>Sub2</label>
+                            <input type="text" name="Sub2" class="form-control" value="<?php echo $Sub2; ?>">
+                            <span class="help-block"><?php echo $Sub2_err;?></span>
+                        </div>
+			<div class="form-group <?php echo (!empty($Sub3_err)) ? 'has-error' : ''; ?>">
+                            <label>Sub3</label>
+                            <input type="text" name="Sub3" class="form-control" value="<?php echo $Sub3; ?>">
+                            <span class="help-block"><?php echo $Sub3_err;?></span>
+                        </div>
+			<div class="form-group <?php echo (!empty($Sub4_err)) ? 'has-error' : ''; ?>">
+                            <label>Sub4</label>
+                            <input type="text" name="Sub4" class="form-control" value="<?php echo $Sub4; ?>">
+                            <span class="help-block"><?php echo $Sub4_err;?></span>
+                        </div>
+			<div class="form-group <?php echo (!empty($Sub5_err)) ? 'has-error' : ''; ?>">
+                            <label>Sub5</label>
+                            <input type="text" name="Sub5" class="form-control" value="<?php echo $Sub5; ?>">
+                            <span class="help-block"><?php echo $Sub5_err;?></span>
+                        </div>
+                       <input type="submit" class="btn btn-primary" value="Submit">
+                        <a href="index.php" class="btn btn-default">Cancel</a>
+                    </form>
+                </div>
+            </div>        
+        </div>
+    </div>
+</body>
+</html>
